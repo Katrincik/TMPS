@@ -72,6 +72,6 @@ class GymRegistration {
 ```
 
 ## Conclusions / Screenshots / Results
-* In conclusion, this laboratory work demonstrates effectively the usage of 2 Solid Principles, such as Single Responsibility Principle (SRP) and Open/Closed Principle (OCP). Implementing User class for user management information and RegularFee and its subclasses for different fee calculations strategies we got to create a clean and flexible code. 
-![Screenshot 2024-10-13 at 20.03.23.png](..%2F..%2F..%2FDesktop%2FScreenshot%202024-10-13%20at%2020.03.23.png)
+* In conclusion, this laboratory work demonstrates effectively the usage of 2 Solid Principles, such as Single Responsibility Principle (SRP) and Open/Closed Principle (OCP). Implementing User class for user management information and RegularFee and its subclasses for different fee calculations strategies we got to create a clean and flexible code.
+![Lab0 Screenshot](./Screenshot_Lab0.png)
 * The screenshot above provides us the behaviour of the code, where each user's fee is calculated according to the membership type as it is presented by the GymRegistration class. This presents us that the logic of the class is applied correctly for each type of user.
