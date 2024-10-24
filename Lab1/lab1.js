@@ -5,9 +5,14 @@ class User {
         this.age = age;
         this.membership = membership;
     }
+
+    // Prototype pattern - Create a copy of a potential user
+    clone() {
+        return new User(this.name, this.age, this.membership);
+    }
 }
 
-// OCP & Strategy Pattern - Interface for fee calculation
+// OCP - Base class for fee division
 class FeeTypes {
     calculateFee() {
         throw new Error("This method must be implemented.");
@@ -49,6 +54,8 @@ class FeeDivision {
         }
     }
 }
+
+// Singleton Pattern - Creating instance of GymRegistration
 class GymRegistration {
     constructor() {
         if (GymRegistration.instance) {
@@ -82,16 +89,31 @@ class GymRegistration {
 
 const gymRegistration = GymRegistration.getInstance();
 
-const user1 = new User('Mihai', 21, 'student');
+const prototypeUser = new User('Default', 25, 'regular');
+
+// Clone the prototype and modify attributes for each new user
+const user1 = prototypeUser.clone();
+user1.name = 'Mihai';
+user1.age = 21;
+user1.membership = 'student';
 gymRegistration.register(user1);
 
-const user2 = new User('Marina', 18, 'regular');
+const user2 = prototypeUser.clone();
+user2.name = 'Marina';
+user2.age = 18;
+user2.membership = 'regular';
 gymRegistration.register(user2);
 
-const user3 = new User('Sanda', 32, 'member');
+const user3 = prototypeUser.clone();
+user3.name = 'Sanda';
+user3.age = 32;
+user3.membership = 'member';
 gymRegistration.register(user3);
 
-const user4 = new User('Ana', 47, 'guest');
+const user4 = prototypeUser.clone();
+user4.name = 'Ana';
+user4.age = 47;
+user4.membership = 'guest';
 gymRegistration.register(user4);
 
 // Confirm singleton behavior
