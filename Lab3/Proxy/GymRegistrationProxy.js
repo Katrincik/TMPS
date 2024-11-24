@@ -6,10 +6,10 @@ class GymRegistrationProxy {
         this.gymRegistration = GymRegistration.getInstance();
     }
 
-    register(user, trainerName = null) {
+    register(user, trainerName = null, timeSlot = null) {
         if (this.isAdmin) {
             console.log(`Admin is registering user: ${user.name}`);
-            this.gymRegistration.register(user, trainerName);
+            this.gymRegistration.register(user, trainerName, timeSlot);
         } else {
             console.log("Access denied: Only admins can register new users.");
         }

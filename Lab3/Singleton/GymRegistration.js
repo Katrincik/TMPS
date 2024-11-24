@@ -1,13 +1,19 @@
 const FeeDivision = require('../Factory/FeeDivision');
-const Trainer = require('../Decorator/Trainer');
 const UserIndivid = require('../Composite/UserIndivid');
 const UserGroup = require('../Composite/UserGroup');
 
 class GymRegistration {
-    constructor() {
+    constructor(mediator) {
+        if (!mediator) {
+            throw new Error("A valid GymMediator instance is required.");
+        }
+
         if (GymRegistration.instance) {
             return GymRegistration.instance;
         }
+
+        this.mediator = mediator;
+        this.mediator.registerGym(this);
 
         GymRegistration.instance = this;
         this.userGroups = {
@@ -18,38 +24,42 @@ class GymRegistration {
         };
     }
 
-    static getInstance() {
-        if (!GymRegistration.instance) {
-            GymRegistration.instance = new GymRegistration();
+    static getInstance(mediator = null) {
+        if (!GymRegistration.instance && mediator) {
+            GymRegistration.instance = new GymRegistration(mediator);
         }
         return GymRegistration.instance;
     }
 
-    register(user, trainerName = null) {
-        const decoratedUser = new Trainer(user, trainerName);
-
-        const feeStrategy = FeeDivision.createFee(user.membership);
-        const fee = feeStrategy.calculateFee();
-
-        decoratedUser.displayTrainerChoice();
-
+    register(user, trainerName = null, timeSlot = null) {
+        const fee = this.mediator.calculateFee(user);
         user.fee = fee;
 
-        const userIndivid = new UserIndivid(user);
+        this.mediator.assignTrainer(user, trainerName, timeSlot);
 
+        const userIndivid = new UserIndivid(user);
+        this._assignToGroup(userIndivid, fee);
+
+        console.log(`${user.name} has been registered.`);
+    }
+
+    _assignToGroup(user, fee) {
         if (fee === 100) {
-            console.log(`${user.name} needs to pay a regular fee of $${fee}.`);
-            this.userGroups.regular.add(userIndivid);
+            this.userGroups.regular.add(user);
         } else if (fee === 50) {
-            console.log(`${user.name} needs to pay a membership fee of $${fee}.`);
-            this.userGroups.membership.add(userIndivid);
+            this.userGroups.membership.add(user);
         } else if (fee === 75) {
-            console.log(`${user.name} needs to pay a student fee of $${fee}.`);
-            this.userGroups.student.add(userIndivid);
+            this.userGroups.student.add(user);
         } else {
-            console.log(`${user.name} is registered for free`);
-            this.userGroups.guest.add(userIndivid);
+            this.userGroups.guest.add(user);
         }
+    }
+
+    calculateUserFee(user) {
+        const feeStrategy = FeeDivision.createFee(user.membership);
+        const fee = feeStrategy.calculateFee();
+        console.log(`${user.name} has a membership type of "${user.membership}" with a fee of $${fee}.`);
+        return fee;
     }
 
     displayAllUsers() {
